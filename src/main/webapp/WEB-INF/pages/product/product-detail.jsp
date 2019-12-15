@@ -96,8 +96,8 @@
                             <small>상품 이미지</small>
                             <div>
                                 <c:choose>
-                                    <c:when test="${product.encodedImage != null}">
-                                        <img src="${product.encodedImage}"/>
+                                    <c:when test="${product.image != null}">
+                                        <img src="${product.image}"/>
                                     </c:when>
                                     <c:otherwise>
                                         <img src="${cp}/static/images/product.png" class="p-3"/>

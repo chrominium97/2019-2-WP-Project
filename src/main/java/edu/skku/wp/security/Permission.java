@@ -10,12 +10,12 @@ public enum Permission {
     ADMIN;
 
     /**
-     * Convert {@link edu.skku.wp.model.User.UserType} to Permission.
+     * Convert {@link User.Type} to Permission.
      *
      * @param type Target user type
      * @return Permission
      */
-    public static Permission getPermission(User.UserType type) {
+    public static Permission getPermission(User.Type type) {
         switch (type) {
             case ADMIN:
                 return ADMIN;

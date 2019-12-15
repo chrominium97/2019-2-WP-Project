@@ -8,20 +8,15 @@ public class SecurityChecker {
 
     public static Boolean hasValidPermission(HttpServletRequest req, Permission permission) {
         User authUser = SessionAuthProvider.getAuthUser(req);
-        User.UserType userType = authUser.getType();
+        if (authUser == null)
+            return permission.equals(Permission.ANONYMOUS);
 
-        if (Permission.getPermission(userType).canAccess(permission))
-            return true;
-
-        return false;
+        return Permission.getPermission(authUser.getType()).canAccess(permission);
     }
 
     public static Boolean hasValidPermission(HttpServletRequest req, String userId) {
         User authUser = SessionAuthProvider.getAuthUser(req);
 
-        if (authUser.getId().equals(userId))
-            return true;
-
-        return false;
+        return authUser.getId().equals(userId);
     }
 }

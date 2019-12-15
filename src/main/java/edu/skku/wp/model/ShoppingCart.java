@@ -5,7 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-@DatabaseTable(tableName = "wishlists")
+@DatabaseTable(tableName = "shoppingcart")
 public class ShoppingCart {
     @DatabaseField(generatedId = true)
     private Integer id;

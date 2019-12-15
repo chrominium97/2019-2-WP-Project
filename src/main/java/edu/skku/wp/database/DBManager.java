@@ -4,10 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import edu.skku.wp.model.Bid;
-import edu.skku.wp.model.Product;
-import edu.skku.wp.model.User;
-import edu.skku.wp.model.Wishlist;
+import edu.skku.wp.model.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -30,11 +27,13 @@ public class DBManager {
             daoMap.put(Product.class, DaoManager.createDao(dataSource, Product.class));
             daoMap.put(Bid.class, DaoManager.createDao(dataSource, Bid.class));
             daoMap.put(Wishlist.class, DaoManager.createDao(dataSource, Wishlist.class));
+            daoMap.put(ShoppingCart.class, DaoManager.createDao(dataSource, Wishlist.class));
 
             TableUtils.createTableIfNotExists(dataSource, User.class);
             TableUtils.createTableIfNotExists(dataSource, Product.class);
             TableUtils.createTableIfNotExists(dataSource, Bid.class);
             TableUtils.createTableIfNotExists(dataSource, Wishlist.class);
+            TableUtils.createTableIfNotExists(dataSource, ShoppingCart.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

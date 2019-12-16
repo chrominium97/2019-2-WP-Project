@@ -18,7 +18,7 @@ public class DBManager {
     private Map<Class<?>, Dao<?, ?>> daoMap = new HashMap<>();
 
     private DBManager() {
-        String classPath = this.getClass().getResource("/").getPath();
+        String classPath = this.getClass().getResource("/../../").getPath();
 
         try {
             JdbcConnectionSource dataSource = new JdbcConnectionSource("jdbc:sqlite:" + classPath + "/META-INF/database.sqlite");

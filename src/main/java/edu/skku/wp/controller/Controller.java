@@ -53,7 +53,7 @@ public abstract class Controller extends HttpServlet {
      * @param res  original page response
      */
     protected void redirect(String path, HttpServletRequest req, HttpServletResponse res) throws IOException {
-        res.sendRedirect(req.getContextPath() + "/" + path);
+        res.sendRedirect(req.getContextPath() + path);
     }
 
     /**

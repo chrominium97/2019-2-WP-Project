@@ -105,11 +105,7 @@
                                     <td>${product.finalPrice}</td>
                                     <td><fmt:formatDate value="${product.expireDate}" pattern="yyyy-MM-dd"/></td>
                                     <td>${product.status.name}</td>
-                                    <td>
-                                        <c:forEach items="${product.wishlists}" var="wishlist">
-                                            <p>${wishlist.user.name}: <fmt:formatDate value="${wishlist.date}" pattern="yyyy-MM-dd HH:mm"/></p>
-                                        </c:forEach>
-                                    </td>
+                                    <td><p>${product.wishlists.size()}</p></td>
                                     <td>
                                         <c:forEach items="${product.bids}" var="bid">
                                             <p>${bid.user.name}: ${bid.price} <fmt:formatDate value="${bid.date}" pattern="yyyy-MM-dd HH:mm"/></p>

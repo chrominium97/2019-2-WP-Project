@@ -18,14 +18,6 @@ public class RegisterController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        switch (path(req)) {
-            case "/register":
-                handleRegister(req, res);
-                break;
-            default:
-                errorBadRequest(req, res);
-                break;
-        }
         jsp("register", req, res);
     }
 
@@ -52,6 +44,13 @@ public class RegisterController extends Controller {
         String type = req.getParameter("type");
 
         try {
+            if (!StringUtil.isNotEmpty(id) || !StringUtil.isNotEmpty(password) || !StringUtil.isNotEmpty(name) || !StringUtil.isNotEmpty(type))
+            {
+                req.setAttribute("errorMessage", "필수 입력란이 비었습니다.");
+                jsp("register", req, res);
+                return;
+            }
+
             Dao<User, String> userDao = DBManager.getDao(User.class);
 
             User user = userDao.queryForId(id);

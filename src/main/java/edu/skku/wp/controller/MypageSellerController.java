@@ -108,18 +108,23 @@ public class MypageSellerController extends Controller {
             Dao<Product, String> productDao = DBManager.getDao(Product.class);
             Product product = productDao.queryForId(id);
 
-            product.setName(name);
-            product.setCategory(category);
-            product.setTradingPlace(tradingPlace);
-            product.setExpireDate(expireDate);
-            product.setDescription(description);
-            product.setImage(image);
-            product.setPrice(price);
-            if (!product.getType().equals(Product.Type.AUCTION))
-                product.setFinalPrice(price);
+            if (product.getStatus() == Product.Status.SOLD) {
+                json(new JsonResponse(false, "이미 판매완료된 상품은 수정이 불가합니다."), req, res);
+            } else {
+                product.setName(name);
+                product.setCategory(category);
+                product.setTradingPlace(tradingPlace);
+                product.setExpireDate(expireDate);
+                product.setDescription(description);
+                product.setImage(image);
+                product.setPrice(price);
+                if (!product.getType().equals(Product.Type.AUCTION))
+                    product.setFinalPrice(price);
 
-            productDao.update(product);
-            json(new JsonResponse(true, "정상적으로 수정되었습니다."), req, res);
+                productDao.update(product);
+                json(new JsonResponse(true, "정상적으로 수정되었습니다."), req, res);
+            }
+
         } catch (SQLException | ParseException e) {
             e.printStackTrace();
         }
@@ -129,8 +134,15 @@ public class MypageSellerController extends Controller {
         String id = req.getParameter("id");
         try {
             Dao<Product, String> productDao = DBManager.getDao(Product.class);
-            productDao.deleteById(id);
-            json(new JsonResponse(true, "정상적으로 제거되었습니다."), req, res);
+            Product product = productDao.queryForId(id);
+
+            if (product.getStatus() == Product.Status.SOLD) {
+                json(new JsonResponse(false, "이미 판매완료된 상품은 삭제가 불가합니다."), req, res);
+            } else  {
+                productDao.deleteById(id);
+                json(new JsonResponse(true, "정상적으로 제거되었습니다."), req, res);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

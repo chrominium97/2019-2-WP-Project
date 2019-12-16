@@ -30,6 +30,13 @@
                 });
             });
         </script>
+        <c:if test="${message ne null}">
+            <script>
+               alert("${message}");
+               location.href = "/mypage/history/seller";
+            </script>
+        </c:if>
+
     </jsp:attribute>
     <jsp:body>
         <!-- Header Section -->

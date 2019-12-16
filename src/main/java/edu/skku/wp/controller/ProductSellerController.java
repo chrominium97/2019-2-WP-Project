@@ -93,8 +93,11 @@ public class ProductSellerController extends Controller {
             product.setSeller(user);
 
             productDao.create(product);
+
+            req.setAttribute("message", "등록 성공하였습니다!\\n 관리자의 승인 후 상품이 표시됩니다.");
         } catch (ParseException | SQLException e) {
             e.printStackTrace();
+            req.setAttribute("message", "등록 실패하였습니다!");
         }
 
         jsp("product/product-register", req, res);

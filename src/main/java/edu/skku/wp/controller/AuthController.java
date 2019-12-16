@@ -43,8 +43,10 @@ public class AuthController extends Controller {
     }
 
     private void handleLoginGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        if (SessionAuthProvider.isLogin(req))
+        if (SessionAuthProvider.isLogin(req)) {
             redirect("/", req, res);
+            return;
+        }
 
         jsp("login", req, res);
     }

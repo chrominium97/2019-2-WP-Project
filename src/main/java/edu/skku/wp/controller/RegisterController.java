@@ -18,14 +18,6 @@ public class RegisterController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        switch (path(req)) {
-            case "/register":
-                handleRegister(req, res);
-                break;
-            default:
-                errorBadRequest(req, res);
-                break;
-        }
         jsp("register", req, res);
     }
 

@@ -146,12 +146,12 @@
                                     <li><a href="${cp}/mypage/history/buyer"><i class="icon-gift"></i> 거래 정보 관리
                                         (구매자)</a>
                                     </li>
+                                    <li><a href="${cp}/mypage/wishlist"><i class="icon-star"></i> 찜 목록 관리</a>
+                                    </li>
                                 </c:if>
                                 <c:if test="${permission eq 'SELLER' or permission eq 'ADMIN'}">
                                     <li><a href="${cp}/mypage/history/seller"><i class="icon-gift"></i> 거래 정보 관리
                                         (판매자)</a>
-                                    </li>
-                                    <li><a href="${cp}/mypage/wishlist"><i class="icon-star"></i> 찜 목록 관리</a>
                                     </li>
                                 </c:if>
                             </div>

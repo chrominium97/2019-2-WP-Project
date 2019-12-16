@@ -79,6 +79,8 @@ public class ProductUserController extends Controller {
             QueryBuilder<Product, Integer> productQb = productDao.queryBuilder();
             Where<Product, Integer> w = productQb.where().ge("id", 1);
 
+            w.and().ne("status", Product.Status.PENDING);
+
             if (StringUtil.isNotEmpty(keyword) && StringUtil.isNotEmpty(keywordType)) {
                 switch (keywordType) {
                     case "productName":

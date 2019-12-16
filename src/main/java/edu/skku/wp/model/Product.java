@@ -41,6 +41,7 @@ public class Product {
     private String image;
 
     private List<Bid> bids;
+    private List<Offer> offers;
     private List<Wishlist> wishlists;
 
     public Product() {
@@ -176,6 +177,14 @@ public class Product {
 
     public void setWishlists(List<Wishlist> wishlists) {
         this.wishlists = wishlists;
+    }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
     }
 
     @Override

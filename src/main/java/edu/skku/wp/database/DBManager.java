@@ -26,11 +26,13 @@ public class DBManager {
             daoMap.put(Product.class, DaoManager.createDao(dataSource, Product.class));
             daoMap.put(Bid.class, DaoManager.createDao(dataSource, Bid.class));
             daoMap.put(Wishlist.class, DaoManager.createDao(dataSource, Wishlist.class));
+            daoMap.put(Offer.class, DaoManager.createDao(dataSource, Offer.class));
 
             TableUtils.createTableIfNotExists(dataSource, User.class);
             TableUtils.createTableIfNotExists(dataSource, Product.class);
             TableUtils.createTableIfNotExists(dataSource, Bid.class);
             TableUtils.createTableIfNotExists(dataSource, Wishlist.class);
+            TableUtils.createTableIfNotExists(dataSource, Offer.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

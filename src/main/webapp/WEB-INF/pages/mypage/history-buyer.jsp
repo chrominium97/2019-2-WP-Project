@@ -133,7 +133,30 @@
                                 <th>${pendingPrice}</th>
                             </tr>
                         </table>
-                        <p class="text-right">전체 합계 (진행중 경매 포함): ${totalPrice} (${totalPrice + pendingPrice})</p>
+                        <h3>네고 진행 중</h3>
+                        <table class="table">
+                            <tr>
+                                <th>분류</th>
+                                <th>이름</th>
+                                <th>판매자</th>
+                                <th>기한</th>
+                                <th>네고가</th>
+                            </tr>
+                            <c:forEach items="${offers}" var="offer">
+                                <tr>
+                                    <td>${offer.product.category.name}</td>
+                                    <td>${offer.product.name}</td>
+                                    <td>${offer.product.seller.name}</td>
+                                    <td><fmt:formatDate value="${offer.product.expireDate}" pattern="yyyy-MM-dd"/></td>
+                                    <td>${offer.price}</td>
+                                </tr>
+                            </c:forEach>
+                            <tr>
+                                <th colspan="4">가격 합계</th>
+                                <th>${offerPrice}</th>
+                            </tr>
+                        </table>
+                        <p class="text-right">전체 합계 (진행중 경매, 네고 포함): ${totalPrice} (${totalPrice + pendingPrice + offerPrice})</p>
                     </article>
 
                     <!-- Selling Information -->

@@ -57,6 +57,7 @@ public class MypageBuyerController extends Controller {
         try {
             Dao<Product, Integer> productDao = DBManager.getDao(Product.class);
             Dao<Bid, Integer> bidDao = DBManager.getDao(Bid.class);
+            Dao<Offer, Integer> offerDao = DBManager.getDao(Offer.class);
 
             List<Product> products = productDao.queryForEq("buyer_id", user.getId());
 
@@ -71,14 +72,28 @@ public class MypageBuyerController extends Controller {
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .collect(Collectors.toList());
+            List<Offer> offers =
+                    offerDao.queryForEq("user_id", user.getId())
+                            .stream()
+                            .collect(Collectors.groupingBy(Offer::getProduct))
+                            .values()
+                            .stream()
+                            .map(pOffers -> pOffers.stream().max((offer, t1) -> offer.getPrice() - t1.getPrice()))
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .collect(Collectors.toList());
+
 
             Integer totalPrice = products.stream().map(Product::getFinalPrice).reduce(Integer::sum).orElse(0);
             Integer pendingPrice = bids.stream().map(Bid::getPrice).reduce(Integer::sum).orElse(0);
+            Integer offerPrice = offers.stream().map(Offer::getPrice).reduce(Integer::sum).orElse(0);
 
             req.setAttribute("products", products);
             req.setAttribute("bids", bids);
+            req.setAttribute("offers", offers);
             req.setAttribute("totalPrice", totalPrice);
             req.setAttribute("pendingPrice", pendingPrice);
+            req.setAttribute("offerPrice", offerPrice);
         } catch (SQLException e) {
             e.printStackTrace();
         }

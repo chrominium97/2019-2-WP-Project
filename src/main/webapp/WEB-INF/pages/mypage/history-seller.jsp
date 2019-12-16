@@ -12,7 +12,7 @@
             $(document).ready(() => {
                 $('.btn-modify').on('click', function () {
                     const id = $(this).data('product-id');
-                    $.get('${cp}/admin/manage-product/get', {id}, (result) => {
+                    $.get('${cp}/mypage/history/seller/get', {id}, (result) => {
                         $.each(result, function (key, value) {
                             $('#form-modify-product').find("[name='" + key + "']:not([type='radio'])").val(value);
                         });
@@ -36,7 +36,7 @@
 
                 $('#form-modify-product').on('submit', function (e) {
                     e.preventDefault();
-                    $.post('${cp}/admin/manage-product/edit', $(this).serialize(), (result) => {
+                    $.post('${cp}/mypage/history/seller/edit', $(this).serialize(), (result) => {
                         if (result.success) {
                             alert(result.message);
                             location.reload();
@@ -50,21 +50,7 @@
                     if (!confirm("정말 제거하시겠습니까?"))
                         return;
                     const id = $(this).data('product-id');
-                    $.post('${cp}/admin/manage-product/delete', {id}, (result) => {
-                        if (result.success) {
-                            alert(result.message);
-                            location.reload();
-                        } else {
-                            alert(result.message);
-                        }
-                    });
-                });
-
-                $('.btn-approve').on('click', function () {
-                    if (!confirm("정말 승인하시겠습니까?"))
-                        return;
-                    const id = $(this).data('product-id');
-                    $.post('${cp}/admin/manage-product/approve', {id}, (result) => {
+                    $.post('${cp}/mypage/history/seller/delete', {id}, (result) => {
                         if (result.success) {
                             alert(result.message);
                             location.reload();
@@ -78,17 +64,16 @@
     </jsp:attribute>
     <jsp:body>
         <!-- Header Section -->
-        <header class="hero-wrap hero-wrap-2"
-                style="background-image: url('${cp}/static/images/bg_1.jpg');"
+        <header class="hero-wrap hero-wrap-2" style="background-image: url('${cp}/static/images/bg_1.jpg');"
                 data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
             <div class="container">
                 <div class="row no-gutters slider-text align-items-end justify-content-start">
                     <div class="col-md-12 ftco-animate text-center mb-5">
                         <p class="breadcrumbs mb-0">
-                            <span class="mr-3"><a href="index">홈 <i class="ion-ios-arrow-forward"></i></a></span>
-                            <span>관리자 페이지</span></p>
-                        <h1 class="mb-3 bread">등록 상품 관리</h1>
+                            <span class="mr-3"><a href="index.jsp">홈 <i class="ion-ios-arrow-forward"></i></a></span>
+                            <span>마이페이지</span></p>
+                        <h1 class="mb-3 bread">상품 거래 히스토리</h1>
                     </div>
                 </div>
             </div>
@@ -98,34 +83,39 @@
         <section class="ftco-section">
             <div class="container">
                 <div class="row">
-                    <!-- User List -->
-                    <article class="col-lg-9 pr-lg-4">
+                    <!-- Item Description -->
+                    <article class="col-lg-12 ftco-animate">
                         <table class="table">
                             <tr>
                                 <th>분류</th>
                                 <th>이름</th>
-                                <th>판매자</th>
                                 <th>유형</th>
                                 <th>가격</th>
                                 <th>기한</th>
                                 <th>상태</th>
+                                <th>찜 현황</th>
+                                <th>입찰(경매)</th>
                                 <th>비고</th>
                             </tr>
                             <c:forEach items="${products}" var="product">
                                 <tr>
                                     <td>${product.category.name}</td>
                                     <td>${product.name}</td>
-                                    <td>${product.seller.name}</td>
                                     <td>${product.type.name}</td>
                                     <td>${product.finalPrice}</td>
                                     <td><fmt:formatDate value="${product.expireDate}" pattern="yyyy-MM-dd"/></td>
                                     <td>${product.status.name}</td>
                                     <td>
-                                        <c:if test="${product.status eq 'PENDING'}">
-                                            <button type="button" class="btn btn-sm btn-success btn-approve"
-                                                    data-product-id="${product.id}">승인
-                                            </button>
-                                        </c:if>
+                                        <c:forEach items="${product.wishlists}" var="wishlist">
+                                            <p>${wishlist.user.name}: <fmt:formatDate value="${wishlist.date}" pattern="yyyy-MM-dd HH:mm"/></p>
+                                        </c:forEach>
+                                    </td>
+                                    <td>
+                                        <c:forEach items="${product.bids}" var="bid">
+                                            <p>${bid.user.name}: ${bid.price} <fmt:formatDate value="${bid.date}" pattern="yyyy-MM-dd HH:mm"/></p>
+                                        </c:forEach>
+                                    </td>
+                                    <td>
                                         <button type="button" class="btn btn-sm btn-secondary btn-modify"
                                                 data-toggle="modal"
                                                 data-target="#modal-product-modify" data-product-id="${product.id}">수정
@@ -139,13 +129,24 @@
                         </table>
                     </article>
 
-                    <!-- Function List -->
-                    <aside class="col-lg-3 sidebar">
+                    <!-- Selling Information -->
+                    <aside class="col-lg-12 sidebar">
                         <div class="sidebar-box ftco-animate p-4 bg-light">
-                            <h3 class="heading-3">관리자 메뉴</h3>
+                            <h3 class="heading-3">마이페이지 메뉴</h3>
                             <div class="categories">
-                                <li><a href="${cp}/admin/manage-user"><i class="icon-users"></i> 사용자 관리</a></li>
-                                <li><a href="${cp}/admin/manage-product"><i class="icon-gift"></i> 등록 상품 관리</a></li>
+                                <li><a href="${cp}/mypage/profile"><i class="icon-user-circle-o"></i> 프로필 관리</a></li>
+                                <c:if test="${permission eq 'BUYER' or permission eq 'ADMIN'}">
+                                    <li><a href="${cp}/mypage/history/buyer"><i class="icon-gift"></i> 거래 정보 관리
+                                        (구매자)</a>
+                                    </li>
+                                </c:if>
+                                <c:if test="${permission eq 'SELLER' or permission eq 'ADMIN'}">
+                                    <li><a href="${cp}/mypage/history/seller"><i class="icon-gift"></i> 거래 정보 관리
+                                        (판매자)</a>
+                                    </li>
+                                    <li><a href="${cp}/mypage/wishlist"><i class="icon-star"></i> 찜 목록 관리</a>
+                                    </li>
+                                </c:if>
                             </div>
                         </div>
                     </aside>
@@ -186,7 +187,7 @@
                         </div>
                         <div class="form-group">
                             <label>거래 유형</label>
-                            <input type="text" name="type" class="form-control" readonly>
+                            <input type="text" class="form-control-plaintext" readonly>
                             <small>거래 유형은 변경할 수 없습니다.</small>
                         </div>
                         <div class="form-group">

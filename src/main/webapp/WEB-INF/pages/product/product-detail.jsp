@@ -24,6 +24,16 @@
                 });
             });
 
+            function buy() {
+                $.post('${cp}/product/buy', {productId: '${product.id}'}, result => {
+                    if (result.success) {
+                        alert(result.message);
+                        location.reload();
+                    } else
+                        alert(result.message);
+                });
+            }
+
             function wishlist() {
                 $.post('${cp}/product/wishlist', {productId: '${product.id}'}, result => {
                     if (result.success) {
@@ -109,55 +119,79 @@
 
                     <!-- Selling Information -->
                     <aside class="col-lg-4 sidebar">
-                        <form class="sidebar-box ftco-animate p-4 bg-light" action="#">
-                            <h3 class="heading-3">${product.type.name} 거래</h3>
-                            <c:choose>
-                                <c:when test="${product.type eq 'AUCTION'}">
-                                    <p>정해진 기간 내에 가장 높은 가격으로 입찰한 사람에게 판매됩니다.</p>
-                                    <div class="mb-4">
-                                        <small>남은 시간</small>
-                                        <h3 id="remain-time" class="text-right"></h3>
-                                    </div>
-                                    <div class="mb-4">
-                                        <small>현재 가격</small>
+                        <c:choose>
+                            <c:when test="${product.status == 'SOLD'}">
+                                <div class="sidebar-box ftco-animate p-4 bg-light">
+                                    <h3>판매완료</h3>
+                                    <p>이 상품은 판매되었습니다.</p>
+                                    <div>
+                                        <small>낙찰 가격</small>
                                         <h1 class="text-right"><fmt:formatNumber type="number" pattern="#,##0"
                                                                                  value="${product.finalPrice}"/>원</h1>
                                     </div>
-                                    <div class="categories mb-4">
-                                        <small>입찰 목록 (최신순)</small>
-                                        <c:forEach items="${bids}" var="bid">
-                                            <li class="d-flex justify-content-between">
-                                                <div>${bid.user.name}</div>
-                                                <div><fmt:formatNumber type="number" pattern="#,##0" value="${bid.price}"/>원</div>
-                                            </li>
-                                        </c:forEach>
-                                    </div>
-                                    <div class="text-right">
-                                        <button type="button" class="btn btn-secondary" onclick="wishlist()">
-                                            <span class="icon-star"></span> 찜하기
-                                        </button>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#modal-bid">
-                                            입찰
-                                        </button>
-                                    </div>
-                                </c:when>
-                                <c:when test="${product.type eq 'FIXED'}">
-                                    <p>판매자가 정한 가격으로 거래합니다.</p>
-                                    <div class="mb-4">
-                                        <small>가격</small>
-                                        <h1 class="text-right"><fmt:formatNumber type="number" pattern="#,##0"
-                                                                                 value="${product.finalPrice}"/>원</h1>
-                                    </div>
-                                    <div class="text-right">
-                                        <button type="button" class="btn btn-secondary" onclick="wishlist()">
-                                            <span class="icon-star"></span> 찜하기
-                                        </button>
-                                        <button type="button" class="btn btn-primary">구매</button>
-                                    </div>
-                                </c:when>
-                            </c:choose>
-                        </form>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <form class="sidebar-box ftco-animate p-4 bg-light" action="#">
+                                    <h3 class="heading-3">${product.type.name} 거래</h3>
+                                    <c:choose>
+                                        <c:when test="${product.type eq 'AUCTION'}">
+                                            <p>정해진 기간 내에 가장 높은 가격으로 입찰한 사람에게 판매됩니다.</p>
+                                            <div class="mb-4">
+                                                <small>남은 시간</small>
+                                                <h3 id="remain-time" class="text-right"></h3>
+                                            </div>
+                                            <div class="mb-4">
+                                                <small>현재 가격</small>
+                                                <h1 class="text-right"><fmt:formatNumber type="number" pattern="#,##0"
+                                                                                         value="${product.finalPrice}"/>원</h1>
+                                            </div>
+                                            <div class="categories mb-4">
+                                                <small>입찰 목록 (최신순)</small>
+                                                <c:forEach items="${bids}" var="bid">
+                                                    <li class="d-flex justify-content-between">
+                                                        <div>${bid.user.name}</div>
+                                                        <div><fmt:formatNumber type="number" pattern="#,##0"
+                                                                               value="${bid.price}"/>원
+                                                        </div>
+                                                    </li>
+                                                </c:forEach>
+                                            </div>
+                                            <div class="text-right">
+                                                <button type="button" class="btn btn-secondary" onclick="wishlist()">
+                                                    <span class="icon-star"></span> 찜하기
+                                                </button>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#modal-bid">
+                                                    입찰
+                                                </button>
+                                            </div>
+                                        </c:when>
+                                        <c:when test="${product.type eq 'FIXED'}">
+                                            <p>판매자가 정한 가격으로 거래합니다.</p>
+                                            <div class="mb-4">
+                                                <small>판매 기한</small>
+                                                <h3 class="text-right"><fmt:formatDate value="${product.expireDate}"
+                                                                                       pattern="yyyy-MM-dd HH:mm"/></h3>
+                                            </div>
+                                            <div class="mb-4">
+                                                <small>가격</small>
+                                                <h1 class="text-right"><fmt:formatNumber type="number" pattern="#,##0"
+                                                                                         value="${product.finalPrice}"/>원</h1>
+                                            </div>
+                                            <div class="text-right">
+                                                <button type="button" class="btn btn-secondary" onclick="wishlist()">
+                                                    <span class="icon-star"></span> 찜하기
+                                                </button>
+                                                <button type="button" class="btn btn-primary" onclick="buy()">구매
+                                                </button>
+                                            </div>
+                                        </c:when>
+                                    </c:choose>
+                                </form>
+
+                            </c:otherwise>
+                        </c:choose>
                         <div class="sidebar-box ftco-animate p-4">
                             <h3 class="heading-3">판매자 정보</h3>
                             <div>

@@ -13,6 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <title>SKKU Flea Market</title>
 
@@ -38,6 +39,11 @@
     <link rel="stylesheet" href="${cp}/static/css/flaticon.css">
     <link rel="stylesheet" href="${cp}/static/css/icomoon.css">
     <link rel="stylesheet" href="${cp}/static/css/style.css">
+    <style>
+        body {
+            overflow-wrap: break-word;
+        }
+    </style>
 
     <!-- Page Specific CSS -->
 
@@ -73,14 +79,14 @@
                                 <a href="${cp}/product/register" class="nav-link"><span class="icon-upload"></span> 상품 등록</a>
                             </li>
                         </c:if>
+                        <li class="nav-item active">
+                            <a href="${cp}/mypage" class="nav-link"><span class="icon-person"></span> 마이페이지</a>
+                        </li>
                         <c:if test="${permission eq 'ADMIN'}">
                             <li class="nav-item active">
                                 <a href="${cp}/admin" class="nav-link"><span class="icon-gears"></span> 관리</a>
                             </li>
                         </c:if>
-                        <li class="nav-item active">
-                            <a href="${cp}/user" class="nav-link"><span class="icon-person"></span> 마이페이지</a>
-                        </li>
                         <li class="nav-item active">
                             <a href="#" onclick="this.nextElementSibling.submit()" class="nav-link"><span class="icon-power-off"></span> 로그아웃</a>
                             <form action="${cp}/logout" method="post" style="display: none"></form>

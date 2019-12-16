@@ -121,7 +121,7 @@
                                         </div>
 
                                         <!-- Add to Wishlist -->
-                                        <div class="ml-auto d-flex align-items-center mt-4 md-md-0">
+                                        <div class="ml-auto d-flex align-items-center md-md-0">
                                             <div class="btn-wishlist">
                                                 <button class="icon text-center d-flex justify-content-center align-items-center icon mr-2"
                                                         onclick="wishlist('${product.id}')">
@@ -183,11 +183,11 @@
                             <h4 class="heading-sidebar">희망 가격<small>(원)</small></h4>
                             <div class="form-group">
                                 <div class="input-group mb-3">
-                                    <input type="number" class="form-control" step="500" name="minPrice"/>
+                                    <input type="number" class="form-control" step="500" name="minPrice" value="${param.minPrice}"/>
                                     <div class="input-group-prepend input-group-append">
                                         <span class="input-group-text">~</span>
                                     </div>
-                                    <input type="number" class="form-control" step="500" name="maxPrice"/>
+                                    <input type="number" class="form-control" step="500" name="maxPrice" value="${param.maxPrice}"/>
                                 </div>
                             </div>
 

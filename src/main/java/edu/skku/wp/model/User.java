@@ -3,6 +3,8 @@ package edu.skku.wp.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Objects;
+
 @DatabaseTable(tableName = "users")
 public class User {
     @DatabaseField(id = true)
@@ -59,7 +61,30 @@ public class User {
         this.type = type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     public enum Type {
-        BUYER, SELLER, ADMIN;
+        BUYER("구매자"), SELLER("판매자"), ADMIN("관리자");
+
+        private String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

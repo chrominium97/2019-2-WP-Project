@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/product/*"})
-public class ProductController extends Controller {
+public class ProductUserController extends Controller {
     @Override
     protected Permission requiredPermission() {
         return Permission.USER;
@@ -27,12 +27,12 @@ public class ProductController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        switch (StringUtil.nvl(req.getPathInfo(), "/")) {
-            case "/":
-            case "/list":
+        switch (path(req)) {
+            case "/product":
+            case "/product/list":
                 handleProductListGet(req, res);
                 break;
-            case "/detail":
+            case "/product/detail":
                 handleProductDetailGet(req, res);
                 break;
             default:
@@ -102,7 +102,7 @@ public class ProductController extends Controller {
 
             if (StringUtil.isNotEmpty(maxPriceStr)) {
                 Integer maxPrice = Integer.parseInt(maxPriceStr);
-                w.and().ge("finalPrice", maxPrice);
+                w.and().le("finalPrice", maxPrice);
             }
 
             if (categories != null && categories.length > 0) {

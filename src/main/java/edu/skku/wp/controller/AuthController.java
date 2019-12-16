@@ -17,7 +17,7 @@ import java.util.Base64;
 public class AuthController extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        switch (req.getServletPath()) {
+        switch (path(req)) {
             case "/login":
                 handleLoginGet(req, res);
                 break;
@@ -29,7 +29,7 @@ public class AuthController extends Controller {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        switch (req.getServletPath()) {
+        switch (path(req)) {
             case "/login":
                 handleLoginPost(req, res);
                 break;
@@ -77,7 +77,7 @@ public class AuthController extends Controller {
 
     private void handleLogoutPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         SessionAuthProvider.removeAuthUser(req);
-        redirect("", req, res);
+        redirect("/", req, res);
     }
 
 }

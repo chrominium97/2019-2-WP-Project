@@ -1,6 +1,7 @@
 package edu.skku.wp.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import edu.skku.wp.security.Permission;
 import edu.skku.wp.security.SecurityChecker;
 
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public abstract class Controller extends HttpServlet {
     /**
@@ -50,7 +53,7 @@ public abstract class Controller extends HttpServlet {
      * @param res  original page response
      */
     protected void redirect(String path, HttpServletRequest req, HttpServletResponse res) throws IOException {
-        res.sendRedirect(req.getContextPath() + path);
+        res.sendRedirect(req.getContextPath() + "/" + path);
     }
 
     /**
@@ -76,7 +79,8 @@ public abstract class Controller extends HttpServlet {
         res.setContentType(MediaType.APPLICATION_JSON);
         res.setCharacterEncoding("UTF-8");
 
-        String encodedObj = new Gson().toJson(obj);
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        String encodedObj = gson.toJson(obj);
 
         PrintWriter writer = res.getWriter();
         writer.print(encodedObj);

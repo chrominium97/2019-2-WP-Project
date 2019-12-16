@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
+import java.util.Objects;
 
 @DatabaseTable(tableName = "wishlists")
 public class Wishlist {
@@ -49,5 +50,18 @@ public class Wishlist {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wishlist wishlist = (Wishlist) o;
+        return id.equals(wishlist.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

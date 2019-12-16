@@ -5,6 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 @DatabaseTable(tableName = "bids")
 public class Bid {
@@ -12,7 +13,7 @@ public class Bid {
     private Integer id;
     @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     private User user;
-    @DatabaseField(foreign = true, canBeNull = false)
+    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     private Product product;
     @DatabaseField(canBeNull = false)
     private Integer price;
@@ -70,5 +71,18 @@ public class Bid {
 
     public void setWin(Boolean win) {
         this.win = win;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bid bid = (Bid) o;
+        return id.equals(bid.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

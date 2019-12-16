@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 @WebServlet({"/product/bid", "/product/buy", "/product/offer", "/product/wishlist"})
-public class BuyerController extends Controller {
+public class ProductBuyerController extends Controller {
 
     @Override
     protected Permission requiredPermission() {

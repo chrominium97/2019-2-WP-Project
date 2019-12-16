@@ -15,25 +15,22 @@ public class DBManager {
         public static final DBManager INSTANCE = new DBManager();
     }
 
-    private Map<Class<?>, Dao<?,?>> daoMap = new HashMap<>();
+    private Map<Class<?>, Dao<?, ?>> daoMap = new HashMap<>();
 
     private DBManager() {
         String classPath = this.getClass().getResource("/").getPath();
 
         try {
             JdbcConnectionSource dataSource = new JdbcConnectionSource("jdbc:sqlite:" + classPath + "/META-INF/database.sqlite");
-
             daoMap.put(User.class, DaoManager.createDao(dataSource, User.class));
             daoMap.put(Product.class, DaoManager.createDao(dataSource, Product.class));
             daoMap.put(Bid.class, DaoManager.createDao(dataSource, Bid.class));
             daoMap.put(Wishlist.class, DaoManager.createDao(dataSource, Wishlist.class));
-            daoMap.put(ShoppingCart.class, DaoManager.createDao(dataSource, Wishlist.class));
 
             TableUtils.createTableIfNotExists(dataSource, User.class);
             TableUtils.createTableIfNotExists(dataSource, Product.class);
             TableUtils.createTableIfNotExists(dataSource, Bid.class);
             TableUtils.createTableIfNotExists(dataSource, Wishlist.class);
-            TableUtils.createTableIfNotExists(dataSource, ShoppingCart.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

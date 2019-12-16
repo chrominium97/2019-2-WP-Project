@@ -1,6 +1,6 @@
 <%@ page import="edu.skku.wp.model.Product" %>
 <%@ page import="edu.skku.wp.model.User" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
@@ -90,9 +90,11 @@
                         </div>
                         <div class="form-group">
                             <label>판매 금액 (시작 금액)</label>
-                            <div class="form-group">
-                                <input type="text" name="tradingPlace" class="form-control">
-                            </div>
+                            <input type="number" name="price" class="form-control" step="500" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>판매 기한</label>
+                            <input type="datetime-local" name="expireDate" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>상품 설명</label>

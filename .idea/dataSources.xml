@@ -7,19 +7,5 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/target/skku-wp-project/WEB-INF/classes/META-INF/database.sqlite</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="database" uuid="9ece4ff6-9451-4fc4-89dc-7cd7bd5a7cee">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\junbread\Projects\university-course\20192-WP\project\target\skku-wp-project\META-INF\database.sqlite</jdbc-url>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/license.txt</url>
-        </library>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/sqlite-jdbc-3.25.1.jar</url>
-        </library>
-      </libraries>
-    </data-source>
   </component>
 </project>

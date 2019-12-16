@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:layout>
     <jsp:body>
-        <div class="hero-wrap img vh-100" style="background-image: url(static/images/bg_1.jpg);">
+        <div class="hero-wrap img vh-100" style="background-image: url(${cp}/static/images/bg_1.jpg);">
             <div class="overlay"></div>
             <div class="container">
                 <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center">

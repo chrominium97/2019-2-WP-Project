@@ -6,6 +6,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @DatabaseTable(tableName = "products")
 public class Product {
@@ -37,6 +39,9 @@ public class Product {
     private Date expireDate;
     @DatabaseField
     private String image;
+
+    private List<Bid> bids;
+    private List<Wishlist> wishlists;
 
     public Product() {
     }
@@ -155,6 +160,35 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
+
+    public List<Wishlist> getWishlists() {
+        return wishlists;
+    }
+
+    public void setWishlists(List<Wishlist> wishlists) {
+        this.wishlists = wishlists;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id.equals(product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public enum Status {

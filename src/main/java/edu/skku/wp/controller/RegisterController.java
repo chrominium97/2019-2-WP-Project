@@ -11,18 +11,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Base64;
 
 @WebServlet(urlPatterns = {"/register", "/register/check-id"})
 public class RegisterController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        switch (path(req)) {
+            case "/register":
+                handleRegister(req, res);
+                break;
+            default:
+                errorBadRequest(req, res);
+                break;
+        }
         jsp("register", req, res);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        switch (req.getServletPath()) {
+        switch (path(req)) {
             case "/register":
                 handleRegister(req, res);
                 break;
@@ -52,7 +61,7 @@ public class RegisterController extends Controller {
             } else {
                 user = new User();
                 user.setId(id);
-                user.setPassword(password);
+                user.setPassword(Base64.getEncoder().encodeToString(password.getBytes()));
                 user.setName(name);
                 user.setPhoneNumber(phoneNumber);
                 user.setType(User.Type.valueOf(type));

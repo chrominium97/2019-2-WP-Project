@@ -187,6 +187,24 @@
                                                 </button>
                                             </div>
                                         </c:when>
+                                        <c:when test="${product.type eq 'OFFER'}">
+                                            <p>판매자에게 직접 연락을 하여 가격을 정합니다..</p>
+                                            <div class="mb-4">
+                                                <small>판매 기한</small>
+                                                <h3 class="text-right"><fmt:formatDate value="${product.expireDate}"
+                                                                                       pattern="yyyy-MM-dd HH:mm"/></h3>
+                                            </div>
+                                            <div class="mb-4">
+                                                <small>희망 가격</small>
+                                                <h1 class="text-right"><fmt:formatNumber type="number" pattern="#,##0"
+                                                                                         value="${product.finalPrice}"/>원</h1>
+                                            </div>
+                                            <div class="text-right">
+                                                <button type="button" class="btn btn-secondary" onclick="wishlist()">
+                                                    <span class="icon-star"></span> 찜하기
+                                                </button>
+                                            </div>
+                                        </c:when>
                                     </c:choose>
                                 </form>
 

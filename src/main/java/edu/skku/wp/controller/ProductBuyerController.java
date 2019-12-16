@@ -150,6 +150,54 @@ public class ProductBuyerController extends Controller {
         json(new JsonResponse(true, "성공적으로 구매했습니다!"), req, res);
     }
 
-    private void handleOfferPost(HttpServletRequest req, HttpServletResponse res) {
+    private void handleOfferPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        String productIdStr = req.getParameter("productId");
+        String priceStr = req.getParameter("price");
+        String commentStr = req.getParameter("comment");
+
+        if (!StringUtil.isNotEmpty(productIdStr) || !StringUtil.isNotEmpty(priceStr)) {
+            json(new JsonResponse(false, "유효하지 않은 파라미터입니다."), req, res);
+            return;
+        }
+
+        Integer productId = Integer.parseInt(productIdStr);
+        Integer price = Integer.parseInt(priceStr);
+
+        try {
+            Dao<Product, Integer> productDao = DBManager.getDao(Product.class);
+
+            Product product = productDao.queryForId(productId);
+            if(product.getStatus() != Product.Status.AVAILABLE) {
+                json(new JsonResponse(false, "이미 종료된 거래입니다."), req, res);
+                return;
+            }
+            Dao<Offer, Integer> offerDao = DBManager.getDao(Offer.class);
+            User user = SessionAuthProvider.getAuthUser(req);
+            Offer offer = offerDao.queryBuilder()
+                    .where()
+                    .eq("user_id", user.getId())
+                    .and()
+                    .eq("product_id", product.getId())
+                    .queryForFirst();
+            if(offer != null) {
+                offer.setPrice(price);
+                offer.setDate(new Date());
+                offer.setComment(commentStr);
+                offerDao.update(offer);
+            } else {
+                offer = new Offer();
+                offer.setUser(user);
+                offer.setProduct(product);
+                offer.setPrice(price);
+                offer.setDate(new Date());
+                offer.setAccept(false);
+                offer.setComment(commentStr);
+                offerDao.create(offer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        json(new JsonResponse(true, "판매자의 수락을 기다려주세요!"), req, res);
     }
 }

@@ -24,6 +24,23 @@
                 });
             });
 
+            $(document).ready(() => {
+                setInterval(setRemainTime, 1000);
+
+                $('#form-offer').submit(e => {
+                    e.preventDefault();
+
+                    $.post('${cp}/product/offer', {productId: '${product.id}', price: $('#price-offer').val(), comment: $('#comment-offer').val()}, result => {
+                        if (result.success) {
+                            alert("판매자의 승인을 기다려주세요!");
+                            location.reload();
+                        } else {
+                            alert('네고에 실패했습니다. ' + result.message);
+                        }
+                    });
+                });
+            });
+
             function buy() {
                 $.post('${cp}/product/buy', {productId: '${product.id}'}, result => {
                     if (result.success) {
@@ -197,11 +214,15 @@
                                             <div class="mb-4">
                                                 <small>희망 가격</small>
                                                 <h1 class="text-right"><fmt:formatNumber type="number" pattern="#,##0"
-                                                                                         value="${product.finalPrice}"/>원</h1>
+                                                                                         value="${product.price}"/>원</h1>
                                             </div>
                                             <div class="text-right">
                                                 <button type="button" class="btn btn-secondary" onclick="wishlist()">
                                                     <span class="icon-star"></span> 찜하기
+                                                </button>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#modal-bid">
+                                                    네고
                                                 </button>
                                             </div>
                                         </c:when>
@@ -247,6 +268,31 @@
                     </form>
                 </div>
             </div>
+        </c:if>
+        <c:if test="${product.type eq 'OFFER'}">
+        <div id="modal-bid" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                <form id="form-offer" class="modal-content" action="#">
+                    <div class="modal-header">
+                        <h5 class="modal-title">네고하기</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>얼마에 네고하시겠습니까?</p>
+                        <input id="price-offer" type="number" class="form-control" value="${product.price - 500}"
+                               step="500"/>
+                        <p>코멘트를 남겨주세요.</p>
+                        <textarea id="comment-offer" class="form-control" placeholder="이곳에 코멘트를 입력하세요."></textarea>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary">확인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         </c:if>
     </jsp:body>
 </t:layout>

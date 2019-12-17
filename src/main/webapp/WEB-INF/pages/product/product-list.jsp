@@ -6,7 +6,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
     pageContext.setAttribute("categories", Product.Category.values());
-    pageContext.setAttribute("paramCategories", String.join(",", request.getParameterValues("category")));
+
+    String[] paramCategories = request.getParameterValues("category");
+    if (paramCategories != null)
+        pageContext.setAttribute("paramCategories", String.join(",", request.getParameterValues("category")));
 %>
 <t:layout>
     <jsp:attribute name="css">
@@ -145,7 +148,8 @@
                             <!-- Search Item Name -->
                             <div class="form-group">
                                 <label>상품 이름</label>
-                                <input type="text" class="form-control" name="productName" placeholder="키워드 입력..." value="${param.productName}">
+                                <input type="text" class="form-control" name="productName" placeholder="키워드 입력..."
+                                       value="${param.productName}">
                             </div>
 
                             <!-- Search Keyword -->
@@ -202,7 +206,8 @@
                                 <label>기타</label>
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="excludeExpired"
-                                           id="exclude-expired" <c:if test="${param.excludeExpired != null}">checked</c:if>>
+                                           id="exclude-expired"
+                                           <c:if test="${param.excludeExpired != null}">checked</c:if>>
                                     <label class="custom-control-label" for="exclude-expired">기한 종료 상품 제외</label>
                                 </div>
                             </div>

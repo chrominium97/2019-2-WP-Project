@@ -16,14 +16,13 @@
                                         <div class="tab-content p-4">
                                             <div class="tab-pane fade show active">
                                                 <form action="${cp}/product/list" class="search-job m-0">
-                                                    <input type="hidden" name="keywordType" value="productName"/>
                                                     <div class="row no-gutters">
                                                         <div class="col-md-10 mr-md-2">
                                                             <div class="form-group">
                                                                 <div class="form-field">
                                                                     <div class="icon"><span
                                                                             class="icon-tag"></span></div>
-                                                                    <input type="text" name="keyword"
+                                                                    <input type="text" name="productName"
                                                                            class="form-control"
                                                                            placeholder="검색어를 입력하세요">
                                                                 </div>

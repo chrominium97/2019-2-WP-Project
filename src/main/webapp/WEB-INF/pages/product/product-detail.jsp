@@ -3,6 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <t:layout>
+    <jsp:attribute name="css">
+        <style>
+            .product-img {
+                max-width: 100%;
+            }
+        </style>
+    </jsp:attribute>
     <jsp:attribute name="js">
         <script>
             const expireDate = new Date('<fmt:formatDate value="${product.expireDate}" pattern="YYYY-MM-dd HH:mm:ss"/>').getTime(); // 종료날짜
@@ -61,8 +68,14 @@
                 });
             }
 
+            const isExpired = ${ product.status ne 'AVAILABLE' }
             function setRemainTime() {
                 const remainDate = expireDate - new Date().getTime();
+
+                if(remainDate < 0 ) {
+                    $('#remain-time').text('만료됨');
+                    if(!isExpired) location.reload();
+                }
 
                 const days = Math.floor(remainDate / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((remainDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -124,10 +137,10 @@
                             <div>
                                 <c:choose>
                                     <c:when test="${product.image != null}">
-                                        <img src="${product.image}"/>
+                                        <img src="${product.image}" class="product-img"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <img src="${cp}/static/images/product.png" class="p-3"/>
+                                        <img src="${cp}/static/images/product.png" class="p-3 product-img"/>
                                     </c:otherwise>
                                 </c:choose>`
                             </div>

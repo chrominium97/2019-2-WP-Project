@@ -137,6 +137,17 @@
                     <!-- Selling Information -->
                     <aside class="col-lg-4 sidebar">
                         <c:choose>
+                            <c:when test="${product.status == 'FAILED'}">
+                                <div class="sidebar-box ftco-animate p-4 bg-light">
+                                    <h3>판매기한 만료</h3>
+                                    <p>이 상품은 기한 내에 판매되지 않았습니다.</p>
+                                    <div class="mb-4">
+                                        <small>판매 기한</small>
+                                        <h3 class="text-right"><fmt:formatDate value="${product.expireDate}"
+                                                                               pattern="yyyy-MM-dd HH:mm"/></h3>
+                                    </div>
+                                </div>
+                            </c:when>
                             <c:when test="${product.status == 'SOLD'}">
                                 <div class="sidebar-box ftco-animate p-4 bg-light">
                                     <h3>판매완료</h3>

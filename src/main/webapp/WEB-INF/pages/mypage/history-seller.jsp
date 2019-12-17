@@ -156,7 +156,9 @@
                                     <td>
                                         <c:choose>
                                             <c:when test="${product.type eq 'OFFER'}">
-                                                <button type="button" class="btn btn-sm btn-primary btn-view-offers" data-toggle="modal" data-target="#modal-view-offers" data-product-id="${product.id}">확인</button>
+                                                <c:if test="${product.status eq 'AVAILABLE'}">
+                                                    <button type="button" class="btn btn-sm btn-primary btn-view-offers" data-toggle="modal" data-target="#modal-view-offers" data-product-id="${product.id}">확인</button>
+                                                </c:if>
                                             </c:when>
                                             <c:otherwise>
                                                 <c:forEach items="${product.bids}" var="bid">

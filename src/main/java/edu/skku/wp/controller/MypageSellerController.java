@@ -51,6 +51,9 @@ public class MypageSellerController extends Controller {
             case "/mypage/history/seller/delete":
                 handleProductDeletePost(req, res);
                 break;
+            case "/mypage/history/seller/offers/accept":
+                handleAcceptOfferPost(req, res);
+                break;
             default:
                 errorBadRequest(req, res);
                 break;
@@ -172,6 +175,30 @@ public class MypageSellerController extends Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleAcceptOfferPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        String id = req.getParameter("id");
+        try{
+            Dao<Offer, String> offerDao = DBManager.getDao(Offer.class);
+            Dao<Product, String> productDao = DBManager.getDao(Product.class);
+
+            Offer offer = offerDao.queryForId(id);
+            Product product = offer.getProduct();
+
+            product.setStatus(Product.Status.SOLD);
+            product.setFinalPrice(offer.getPrice());
+
+            productDao.update(product);
+
+            offer.setAccept(true);
+            offerDao.update(offer);
+
+            json(new JsonResponse(true, "승인되었습니다!"), req, res);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

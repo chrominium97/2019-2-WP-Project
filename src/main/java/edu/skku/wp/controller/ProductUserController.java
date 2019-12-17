@@ -73,7 +73,7 @@ public class ProductUserController extends Controller {
         String maxPriceStr = req.getParameter("maxPrice");
         String[] categories = req.getParameterValues("category");
 
-        Boolean excludeSold = req.getParameterMap().containsKey("excludeSold");
+        Boolean excludeExpired = req.getParameterMap().containsKey("excludeExpired");
 
         try {
             Dao<Product, Integer> productDao = DBManager.getDao(Product.class);
@@ -86,7 +86,7 @@ public class ProductUserController extends Controller {
             w.and().ne("status", Product.Status.PENDING);
 
             // Exclude expired items
-            if (excludeSold) {
+            if (excludeExpired) {
                 w.and().ne("status", Product.Status.SOLD);
                 w.and().ne("status", Product.Status.FAILED);
             }

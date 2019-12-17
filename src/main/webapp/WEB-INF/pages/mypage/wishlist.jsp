@@ -92,6 +92,7 @@
                                     <li><a href="${cp}/mypage/wishlist"><i class="icon-star"></i> 찜 목록 관리</a>
                                     </li>
                                 </c:if>
+                                <li><a href="${cp}/mypage/wishlist"><i class="icon-star"></i> 찜 목록 관리</a>
                             </div>
                         </div>
                     </aside>

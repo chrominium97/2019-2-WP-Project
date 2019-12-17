@@ -20,11 +20,22 @@
                         $.each($('#form-modify-product [type="radio"]'), function(key, el) {
                             if(result.category == el.value) $(el).attr('checked', true);
                         });
+
+                        $('#preview').attr('src', result.image);
                     });
                 });
 
                 $('#file').on('change', function(){
-                    var fr = new FileReader();
+                    if(!$(this).val()) return;
+
+                    const fileSize = this.files[0].size;
+                    const fr = new FileReader();
+
+                    if(fileSize > 200000){
+                        alert('이미지 파일 크기는 200KB를 넘을 수 없습니다.');
+                        $(this).val('');
+                        return;
+                    }
 
                     fr.addEventListener('load', function(e) {
                         $('#file_base64').val(e.target.result);
@@ -204,9 +215,9 @@
                         </div>
                         <div class="form-group">
                             <label>상품 이미지</label>
-                            <input type="file" id="file" class="form-control-file">
+                            <input type="file" id="file" class="form-control-file mb-4">
                             <input type="hidden" id="file_base64" name="image">
-                            <img id="preview" src="">
+                            <img id="preview" src="" class="mw-100">
                         </div>
                     </div>
                     <div class="modal-footer text-right">

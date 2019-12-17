@@ -19,7 +19,16 @@
         <script>
             $(document).ready(() => {
                 $('#file').on('change', function(){
-                    var fr = new FileReader();
+                    if(!$(this).val()) return;
+
+                    const fileSize = this.files[0].size;
+                    const fr = new FileReader();
+
+                    if(fileSize > 200000){
+                        alert('이미지 파일 크기는 200KB를 넘을 수 없습니다.');
+                        $(this).val('');
+                        return;
+                    }
 
                     fr.addEventListener('load', function(e) {
                         $('#file_base64').val(e.target.result);

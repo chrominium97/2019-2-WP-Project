@@ -42,7 +42,7 @@
         <c:if test="${message ne null}">
             <script>
                alert("${message}");
-               location.href = "/mypage/history/seller";
+               location.href = "${cp}/mypage/history/seller";
             </script>
         </c:if>
 

@@ -15,7 +15,7 @@
     <jsp:attribute name="css">
         <style>
             .product-thumbnail {
-                max-width: 8rem;
+                width: 8rem;
             }
 
             .product-thumbnail img {
@@ -83,6 +83,11 @@
                     <!-- Product List -->
                     <article class="col-lg-8 pr-lg-4">
                         <div class="row">
+                            <c:if test="${fn:length(products) eq 0}">
+                                <div class="col-md-12 p-4">
+                                    <h3 class="heading-3">검색 결과가 없습니다.</h3>
+                                </div>
+                            </c:if>
                             <!-- List Start -->
                             <c:forEach items="${products}" var="product">
                                 <div class="col-md-12 ftco-animate">
@@ -90,7 +95,7 @@
                                         <!-- Product Information -->
                                         <div class="product-thumbnail mr-4">
                                             <c:choose>
-                                                <c:when test="${product.image != null}">
+                                                <c:when test="${fn:length(product.image) > 0}">
                                                     <img src="${product.image}"/>
                                                 </c:when>
                                                 <c:otherwise>

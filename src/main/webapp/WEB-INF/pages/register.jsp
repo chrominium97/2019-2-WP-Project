@@ -67,7 +67,7 @@
         </div>
         <input type="password" name="password" class="form-control mb-2" placeholder="비밀번호" required>
         <input type="text" name="name" class="form-control mb-2" placeholder="이름" required>
-        <input type="text" name="phoneNumber" class="form-control mb-2" placeholder="휴대폰 번호 (옵션)">
+        <input type="text" name="phoneNumber" class="form-control mb-2" placeholder="휴대폰 번호" required>
         <label for="type">회원 종류</label>
         <div id="type" class="form-group">
             <span class="custom-control custom-control-inline custom-radio">

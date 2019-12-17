@@ -66,11 +66,14 @@ public class ProductUserController extends Controller {
     }
 
     private void handleProductListGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        String productName = req.getParameter("productName");
         String keyword = req.getParameter("keyword");
         String keywordType = req.getParameter("keywordType");
         String minPriceStr = req.getParameter("minPrice");
         String maxPriceStr = req.getParameter("maxPrice");
         String[] categories = req.getParameterValues("category");
+
+        Boolean excludeSold = req.getParameterMap().containsKey("excludeSold");
 
         try {
             Dao<Product, Integer> productDao = DBManager.getDao(Product.class);
@@ -79,13 +82,22 @@ public class ProductUserController extends Controller {
             QueryBuilder<Product, Integer> productQb = productDao.queryBuilder();
             Where<Product, Integer> w = productQb.where().ge("id", 1);
 
+            // Exclude not approved items
             w.and().ne("status", Product.Status.PENDING);
 
+            // Exclude expired items
+            if (excludeSold) {
+                w.and().ne("status", Product.Status.SOLD);
+                w.and().ne("status", Product.Status.FAILED);
+            }
+
+            // Product Name
+            if (StringUtil.isNotEmpty(productName))
+                w.and().like("name", "%" + productName + "%");
+
+            // Keywords
             if (StringUtil.isNotEmpty(keyword) && StringUtil.isNotEmpty(keywordType)) {
                 switch (keywordType) {
-                    case "productName":
-                        w.and().like("name", "%" + keyword + "%");
-                        break;
                     case "tradingPlace":
                         w.and().like("tradingPlace", "%" + keyword + "%");
                         break;
@@ -97,16 +109,19 @@ public class ProductUserController extends Controller {
                 }
             }
 
+            // Min price
             if (StringUtil.isNotEmpty(minPriceStr)) {
                 Integer minPrice = Integer.parseInt(minPriceStr);
                 w.and().ge("finalPrice", minPrice);
             }
 
+            // Max price
             if (StringUtil.isNotEmpty(maxPriceStr)) {
                 Integer maxPrice = Integer.parseInt(maxPriceStr);
                 w.and().le("finalPrice", maxPrice);
             }
 
+            // Category
             if (categories != null && categories.length > 0) {
                 for (String category : categories)
                     w.eq("category", Product.Category.valueOf(category));

@@ -6,6 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
     pageContext.setAttribute("categories", Product.Category.values());
+    pageContext.setAttribute("paramCategories", String.join(",", request.getParameterValues("category")));
 %>
 <t:layout>
     <jsp:attribute name="css">
@@ -141,15 +142,18 @@
                         <form class="sidebar-box ftco-animate search-form p-4 clearfix" action="#" method="get">
                             <h3 class="heading-3">검색 옵션</h3>
 
+                            <!-- Search Item Name -->
+                            <div class="form-group">
+                                <label>상품 이름</label>
+                                <input type="text" class="form-control" name="productName" placeholder="키워드 입력..." value="${param.productName}">
+                            </div>
+
                             <!-- Search Keyword -->
                             <div class="form-group">
+                                <label>기타 검색어</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <select class="form-control" name="keywordType">
-                                            <option value="productName"
-                                                    <c:if test="${param.keywordType eq 'productName'}">selected</c:if>>
-                                                상품이름
-                                            </option>
                                             <option value="sellerName"
                                                     <c:if test="${param.keywordType eq 'sellerName'}">selected</c:if>>
                                                 판매자이름
@@ -165,29 +169,41 @@
                                 </div>
                             </div>
 
-                            <!-- Category List -->
-                            <h4 class="heading-sidebar">카테고리</h4>
+                            <!-- Price Range -->
                             <div class="form-group">
+                                <label>희망 가격<small>(원)</small></label>
+                                <div class="input-group mb-3">
+                                    <input type="number" class="form-control" step="500" min="0" name="minPrice"
+                                           value="${param.minPrice}"/>
+                                    <div class="input-group-prepend input-group-append">
+                                        <span class="input-group-text">~</span>
+                                    </div>
+                                    <input type="number" class="form-control" step="500" name="maxPrice"
+                                           value="${param.maxPrice}"/>
+                                </div>
+                            </div>
+
+                            <!-- Category List -->
+                            <div class="form-group">
+                                <label>카테고리</label>
                                 <c:forEach items="${categories}" var="category">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" name="category"
                                                value="${category}" id="check-${category}"
-                                               <c:if test="${fn:contains(paramValues.category, category)}">checked</c:if>>
+                                               <c:if test="${fn:contains(paramCategories, category)}">checked</c:if>>
                                         <label class="custom-control-label"
                                                for="check-${category}">${category.name}</label>
                                     </div>
                                 </c:forEach>
                             </div>
 
-                            <!-- Price Range -->
-                            <h4 class="heading-sidebar">희망 가격<small>(원)</small></h4>
+                            <!-- Etc Filter -->
                             <div class="form-group">
-                                <div class="input-group mb-3">
-                                    <input type="number" class="form-control" step="500" name="minPrice" value="${param.minPrice}"/>
-                                    <div class="input-group-prepend input-group-append">
-                                        <span class="input-group-text">~</span>
-                                    </div>
-                                    <input type="number" class="form-control" step="500" name="maxPrice" value="${param.maxPrice}"/>
+                                <label>기타</label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="excludeExpired"
+                                           id="exclude-expired" <c:if test="${param.excludeExpired != null}">checked</c:if>>
+                                    <label class="custom-control-label" for="exclude-expired">기한 종료 상품 제외</label>
                                 </div>
                             </div>
 

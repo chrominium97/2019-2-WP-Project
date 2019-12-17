@@ -33,6 +33,9 @@ public class MypageSellerController extends Controller {
             case "/mypage/history/seller/get":
                 handleProductGetGet(req, res);
                 break;
+            case "/mypage/history/seller/offers":
+                handleProductOffersGet(req, res);
+                break;
             default:
                 errorBadRequest(req, res);
                 break;
@@ -90,6 +93,29 @@ public class MypageSellerController extends Controller {
         }
     }
 
+    private void handleProductOffersGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        String id = req.getParameter("id");
+        try {
+            Dao<Offer, String> offerDao = DBManager.getDao(Offer.class);
+            List<Offer> offers = offerDao.queryBuilder()
+                    .selectColumns("user_id", "price", "comment")
+                    .where()
+                    .eq("product_id", id)
+                    .query();
+
+            for (Offer o : offers) {
+                User u = o.getUser();
+                u.setId(null);
+                u.setPassword(null);
+                u.setType(null);
+            }
+
+            json(offers, req, res);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void handleProductEditPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         String id = req.getParameter("id");
         String name = req.getParameter("name");
@@ -138,7 +164,7 @@ public class MypageSellerController extends Controller {
 
             if (product.getStatus() == Product.Status.SOLD) {
                 json(new JsonResponse(false, "이미 판매완료된 상품은 삭제가 불가합니다."), req, res);
-            } else  {
+            } else {
                 productDao.deleteById(id);
                 json(new JsonResponse(true, "정상적으로 제거되었습니다."), req, res);
             }

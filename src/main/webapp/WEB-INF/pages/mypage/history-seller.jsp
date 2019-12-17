@@ -9,6 +9,12 @@
 <t:layout>
     <jsp:attribute name="js">
         <script>
+            function acceptOffer(id) {
+                $.post('${cp}/mypage/history/seller/offers/accept', {id}, (result) => {
+                    location.reload();
+                });
+            }
+
             $(document).ready(() => {
                 $('.btn-modify').on('click', function () {
                     const id = $(this).data('product-id');
@@ -19,6 +25,22 @@
 
                         $.each($('#form-modify-product [type="radio"]'), function(key, el) {
                             if(result.category == el.value) $(el).attr('checked', true);
+                        });
+                    });
+                });
+
+                $('.btn-view-offers').on('click', function () {
+                    const id = $(this).data('product-id');
+                    $.get('${cp}/mypage/history/seller/offers', {id}, (result) => {
+                        let tbody = $("#form-accept-offer tbody");
+                        tbody.find("tr:not(:first-child)").remove();
+                        $.each(result, function (key, value) {
+                            let newRow = $("<tr>");
+                            newRow.append($("<td>").text(value.price));
+                            newRow.append($("<td>").text(value.comment));
+                            newRow.append($("<td>").text(value.user.name));
+                            newRow.append($("<td>").append($("<button>", {"class": "btn btn-primary", "onclick": "acceptOffer(" + value.id + ")"}).text("승인")));
+                            tbody.append(newRow);
                         });
                     });
                 });
@@ -71,6 +93,22 @@
             });
         </script>
     </jsp:attribute>
+    <jsp:attribute name="css">
+        <style>
+            #form-accept-offer tbody tr:not(:first-child) {
+                white-space: nowrap;
+            }
+
+            #form-accept-offer td:nth-last-child(1) {
+                white-space: nowrap;
+                width: 1px;
+            }
+            #form-accept-offer td:nth-last-child(2) {
+                white-space: nowrap;
+                width: 1px;
+            }
+        </style>
+    </jsp:attribute>
     <jsp:body>
         <!-- Header Section -->
         <header class="hero-wrap hero-wrap-2" style="background-image: url('${cp}/static/images/bg_1.jpg');"
@@ -116,9 +154,16 @@
                                     <td>${product.status.name}</td>
                                     <td><p>${product.wishlists.size()}</p></td>
                                     <td>
-                                        <c:forEach items="${product.bids}" var="bid">
-                                            <p>${bid.user.name}: ${bid.price} <fmt:formatDate value="${bid.date}" pattern="yyyy-MM-dd HH:mm"/></p>
-                                        </c:forEach>
+                                        <c:choose>
+                                            <c:when test="${product.type eq 'OFFER'}">
+                                                <button type="button" class="btn btn-sm btn-primary btn-view-offers" data-toggle="modal" data-target="#modal-view-offers" data-product-id="${product.id}">확인</button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:forEach items="${product.bids}" var="bid">
+                                                    <p>${bid.user.name}: ${bid.price} <fmt:formatDate value="${bid.date}" pattern="yyyy-MM-dd HH:mm"/></p>
+                                                </c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-secondary btn-modify"
@@ -220,6 +265,30 @@
                         <button type="submit" class="btn btn-primary">확인</button>
                     </div>
                 </form>
+            </div>
+        </div>
+        <div id="modal-view-offers" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-xl modal-dialog modal-dialog-centered" role="document">
+                <div id="form-accept-offer" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">네고 요청 목록</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <article class="col-lg-12 ftco-animate">
+                            <table class="table">
+                                <tr style="white-space: nowrap;">
+                                    <th>가격</th>
+                                    <th>코멘트</th>
+                                    <th>이름</th>
+                                    <th></th>
+                                </tr>
+                            </table>
+                        </article>
+                    </div>
+                </div>
             </div>
         </div>
     </jsp:body>

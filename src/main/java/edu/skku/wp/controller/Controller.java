@@ -2,6 +2,7 @@ package edu.skku.wp.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import edu.skku.wp.database.ProductExpireProcedure;
 import edu.skku.wp.security.Permission;
 import edu.skku.wp.security.SecurityChecker;
 
@@ -40,6 +41,9 @@ public abstract class Controller extends HttpServlet {
             res.sendError(HttpServletResponse.SC_FORBIDDEN, "유효한 권한을 가지고 있지 않습니다.");
             return;
         }
+
+        // run procedure that checks products are expired
+        ProductExpireProcedure.run();
 
         // if no problem, proceed
         super.service(req, res);
